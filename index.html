@@ -63,7 +63,8 @@
       transition: transform 0.1s, opacity 0.1s;
     }
 
-    button:active {
+    button:active,
+    button.key-pressed {
       transform: scale(0.95);
       opacity: 0.8;
     }
@@ -163,6 +164,48 @@
         expression = '';
       }
     }
+
+    // Flash the matching button on screen when a key is pressed
+    function flashButton(selector) {
+      const btn = document.querySelector(selector);
+      if (btn) {
+        btn.classList.add('key-pressed');
+        setTimeout(() => btn.classList.remove('key-pressed'), 150);
+      }
+    }
+
+    // Keyboard support
+    document.addEventListener('keydown', (e) => {
+      if (e.key >= '0' && e.key <= '9') {
+        appendToDisplay(e.key);
+        flashButton(`button[onclick="appendToDisplay('${e.key}')"]`);
+      } else if (e.key === '.') {
+        appendToDisplay('.');
+        flashButton(`button[onclick="appendToDisplay('.')"]`);
+      } else if (e.key === '+') {
+        appendToDisplay('+');
+        flashButton(`button[onclick="appendToDisplay('+')"]`);
+      } else if (e.key === '-') {
+        appendToDisplay('-');
+        flashButton(`button[onclick="appendToDisplay('-')"]`);
+      } else if (e.key === '*') {
+        appendToDisplay('*');
+        flashButton(`button[onclick="appendToDisplay('*')"]`);
+      } else if (e.key === '/') {
+        e.preventDefault(); // stop browser quick-find
+        appendToDisplay('/');
+        flashButton(`button[onclick="appendToDisplay('/')"]`);
+      } else if (e.key === 'Enter' || e.key === '=') {
+        calculate();
+        flashButton(`button.btn-equal`);
+      } else if (e.key === 'Backspace') {
+        deleteLast();
+        flashButton(`button[onclick="deleteLast()"]`);
+      } else if (e.key === 'Escape') {
+        clearAll();
+        flashButton(`button.btn-clear`);
+      }
+    });
   </script>
 </body>
 </html>
