@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My First Calculator</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #1a1a2e;
+      font-family: Arial, sans-serif;
+    }
+
+    .calculator {
+      background: #16213e;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      width: 320px;
+    }
+
+    .display {
+      background: #0f3460;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: right;
+      margin-bottom: 20px;
+    }
+
+    .display .expression {
+      color: #a0aec0;
+      font-size: 14px;
+      min-height: 20px;
+      margin-bottom: 8px;
+    }
+
+    .display .result {
+      color: #ffffff;
+      font-size: 36px;
+      font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    button {
+      padding: 18px;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.1s;
+    }
+
+    button:active {
+      transform: scale(0.95);
+      opacity: 0.8;
+    }
+
+    .btn-number {
+      background: #0f3460;
+      color: #ffffff;
+    }
+
+    .btn-operator {
+      background: #e94560;
+      color: #ffffff;
+    }
+
+    .btn-equal {
+      background: #4ecca3;
+      color: #1a1a2e;
+      grid-column: span 2;
+    }
+
+    .btn-clear {
+      background: #f5a623;
+      color: #1a1a2e;
+      grid-column: span 2;
+    }
+
+    .btn-zero {
+      grid-column: span 2;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display">
+      <div class="expression" id="expression"></div>
+      <div class="result" id="result">0</div>
+    </div>
+    <div class="buttons">
+      <button class="btn-clear btn-clear" onclick="clearAll()">AC</button>
+      <button class="btn-operator" onclick="deleteLast()">⌫</button>
+      <button class="btn-operator" onclick="appendToDisplay('/')">÷</button>
+      <button class="btn-operator" onclick="appendToDisplay('*')">×</button>
+
+      <button class="btn-number" onclick="appendToDisplay('7')">7</button>
+      <button class="btn-number" onclick="appendToDisplay('8')">8</button>
+      <button class="btn-number" onclick="appendToDisplay('9')">9</button>
+      <button class="btn-operator" onclick="appendToDisplay('-')">−</button>
+
+      <button class="btn-number" onclick="appendToDisplay('4')">4</button>
+      <button class="btn-number" onclick="appendToDisplay('5')">5</button>
+      <button class="btn-number" onclick="appendToDisplay('6')">6</button>
+      <button class="btn-operator" onclick="appendToDisplay('+')">+</button>
+
+      <button class="btn-number" onclick="appendToDisplay('1')">1</button>
+      <button class="btn-number" onclick="appendToDisplay('2')">2</button>
+      <button class="btn-number" onclick="appendToDisplay('3')">3</button>
+      <button class="btn-equal" onclick="calculate()">=</button>
+
+      <button class="btn-number btn-zero" onclick="appendToDisplay('0')">0</button>
+      <button class="btn-number" onclick="appendToDisplay('.')">.</button>
+    </div>
+  </div>
+
+  <script>
+    let expression = '';
+
+    function updateDisplay() {
+      document.getElementById('expression').textContent = expression;
+    }
+
+    function appendToDisplay(value) {
+      expression += value;
+      updateDisplay();
+      document.getElementById('result').textContent = expression;
+    }
+
+    function clearAll() {
+      expression = '';
+      document.getElementById('result').textContent = '0';
+      document.getElementById('expression').textContent = '';
+    }
+
+    function deleteLast() {
+      expression = expression.slice(0, -1);
+      document.getElementById('result').textContent = expression || '0';
+      updateDisplay();
+    }
+
+    function calculate() {
+      try {
+        const answer = eval(expression);
+        document.getElementById('expression').textContent = expression + ' =';
+        document.getElementById('result').textContent = answer;
+        expression = String(answer);
+      } catch (e) {
+        document.getElementById('result').textContent = 'Error';
+        expression = '';
+      }
+    }
+  </script>
+</body>
+</html>
